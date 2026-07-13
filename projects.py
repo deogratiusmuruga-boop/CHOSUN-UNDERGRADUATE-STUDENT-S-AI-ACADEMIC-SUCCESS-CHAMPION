@@ -3,79 +3,65 @@ from typing import List, Optional
 
 
 @dataclass
-class Opportunity:
+class StudentProject:
     id: str
     title: str
-    organization: str
-    type: str  # "Scholarship", "Internship", "Competition", "Grant", "Exchange Program"
-    amount_or_stipend: Optional[str]
-    min_gpa: float
-    eligible_majors: List[str]
-    deadline: str
+    department: str         # e.g., "Computer Engineering", "AI Software"
+    difficulty: str         # "Beginner", "Intermediate", "Advanced"
+    tech_stack: List[str]
     description: str
-    application_url: str
+    github_template_url: str
 
 
-# Sample dataset aligning with image categories
-SAMPLE_OPPORTUNITIES: List[Opportunity] = [
-    Opportunity(
-        id="opp_01",
-        title="Global STEM Merit Scholarship",
-        organization="Tech Forward Foundation",
-        type="Scholarship",
-        amount_or_stipend="$5,000",
-        min_gpa=3.5,
-        eligible_majors=["Computer Science", "Engineering"],
-        deadline="2026-11-30",
-        description="Merit-based award for high-performing undergraduates.",
-        application_url="https://example.org/stem-scholarship"
+CHOSUN_PROJECT_IDEAS: List[StudentProject] = [
+    StudentProject(
+        id="csu_proj_01",
+        title="Chosun Campus Shuttle & Class Finder App",
+        department="Computer Engineering",
+        difficulty="Intermediate",
+        tech_stack=["React Native", "FastAPI", "Kakao Maps API"],
+        description="Real-time shuttle tracking and interactive building/classroom navigator for Chosun University Gwangju Campus.",
+        github_template_url="https://github.com/example/chosun-shuttle-tracker"
     ),
-    Opportunity(
-        id="opp_02",
-        title="AI Research Internship",
-        organization="OpenLab AI",
-        type="Internship",
-        amount_or_stipend="$30/hr",
-        min_gpa=3.2,
-        eligible_majors=["Computer Science", "Data Science"],
-        deadline="2026-10-15",
-        description="Hands-on experience with LLM finetuning and evaluation.",
-        application_url="https://example.org/ai-internship"
+    StudentProject(
+        id="csu_proj_02",
+        title="AI Academic Advisor & 4.5 GPA Planner",
+        department="AI Software",
+        difficulty="Intermediate",
+        tech_stack=["Python", "Llama 3.1", "FastAPI", "PostgreSQL"],
+        description="An AI chatbot that calculates 4.5 GPA grade projections, tracks prerequisite subjects, and recommends study plans.",
+        github_template_url="https://github.com/example/chosun-academic-advisor"
     ),
-    Opportunity(
-        id="opp_03",
-        title="Global Exchange & Study Abroad Grant",
-        organization="International Student Network",
-        type="Exchange Program",
-        amount_or_stipend="Full Tuition + Stipend",
-        min_gpa=3.0,
-        eligible_majors=["All"],
-        deadline="2026-12-01",
-        description="Semester-long exchange program at partner universities.",
-        application_url="https://example.org/exchange"
+    StudentProject(
+        id="csu_proj_03",
+        title="Automated Multilingual Course Material Summarizer",
+        department="Global IT",
+        difficulty="Beginner",
+        tech_stack=["Python", "Streamlit", "OpenAI / Ollama"],
+        description="Translates and summarizes Chosun University lecture notes and PDFs between Korean and English.",
+        github_template_url="https://github.com/example/chosun-lecture-summarizer"
     )
 ]
 
 
-def get_all_opportunities(opportunity_type: Optional[str] = None) -> List[dict]:
-    """Retrieve opportunities, optionally filtered by type (Scholarship, Internship, etc.)."""
-    if not opportunity_type:
-        return [asdict(o) for o in SAMPLE_OPPORTUNITIES]
+def get_chosun_project_ideas(department: Optional[str] = None) -> List[dict]:
+    """Retrieve curated student project ideas tailored for Chosun University courses."""
+    if not department:
+        return [asdict(p) for p in CHOSUN_PROJECT_IDEAS]
     
     return [
-        asdict(o) for o in SAMPLE_OPPORTUNITIES 
-        if o.type.lower() == opportunity_type.lower()
+        asdict(p) for p in CHOSUN_PROJECT_IDEAS 
+        if department.lower() in p.department.lower()
     ]
 
 
-def recommend_opportunities(user_gpa: float, user_major: str) -> List[dict]:
-    """Match user profile against requirements (GPA and Major eligibility)."""
-    recommendations = []
-    for opp in SAMPLE_OPPORTUNITIES:
-        if user_gpa >= opp.min_gpa:
-            major_match = "All" in opp.eligible_majors or any(
-                m.lower() == user_major.lower() for m in opp.eligible_majors
-            )
-            if major_match:
-                recommendations.append(asdict(opp))
-    return recommendations
+def get_portfolio_guidelines_chosun() -> dict:
+    """Returns guidelines for Chosun undergraduates building capstone & job-ready portfolios."""
+    return {
+        "recommended_platforms": ["GitHub", "Velog / Tistory", "Notion Portfolio"],
+        "key_requirements": [
+            "Provide detailed README in both Korean and English.",
+            "Include architecture diagrams matching system components.",
+            "Deploy live demo using Vercel/Render or local Docker instructions."
+        ]
+    }

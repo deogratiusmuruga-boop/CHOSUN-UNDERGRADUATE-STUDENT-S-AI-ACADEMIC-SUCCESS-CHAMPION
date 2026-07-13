@@ -3,67 +3,108 @@ from typing import List, Optional
 
 
 @dataclass
-class ProjectIdea:
+class ChosunScholarship:
     id: str
-    title: str
-    domain: str             # e.g., "AI/ML", "Web Dev", "Data Science"
-    difficulty: str         # "Beginner", "Intermediate", "Advanced"
-    tech_stack: List[str]
+    title_kr: str
+    title_en: str
+    category: str  # "Academic", "Language", "Improvement", "External"
+    min_gpa: float # Chosun Univ scale max is 4.5
+    topik_level: Optional[int]
+    benefit: str
     description: str
-    guidelines: List[str]   # Step-by-step development guidelines
-    recommended_datasets: List[str]
 
 
-# Sample dataset supporting Portfolio Builder and Project Ideas
-SAMPLE_PROJECTS: List[ProjectIdea] = [
-    ProjectIdea(
-        id="proj_01",
-        title="AI-Powered Study Planner & GPA Tracker",
-        domain="AI/ML",
-        difficulty="Intermediate",
-        tech_stack=["Python", "FastAPI", "React", "Llama 3.1"],
-        description="An intelligent schedule manager that plans study blocks based on course syllabi.",
-        guidelines=[
-            "Set up FastAPI backend and connect SQLite/PostgreSQL database.",
-            "Integrate Llama 3.1 via Ollama or Groq API for text generation.",
-            "Build a React dashboard displaying GPA metrics and calendar."
-        ],
-        recommended_datasets=["Kaggle Student Performance Dataset", "Synthetic Quiz Data"]
+# Dataset aligned with official Chosun University Undergraduate Regulations
+CHOSUN_SCHOLARSHIPS: List[ChosunScholarship] = [
+    ChosunScholarship(
+        id="csu_sch_01",
+        title_kr="성적장학금 (최우수)",
+        title_en="Academic Achievement Scholarship (Full)",
+        category="Academic",
+        min_gpa=4.2,
+        topik_level=None,
+        benefit="100% Tuition Waiver",
+        description="Awarded to current students with a previous semester GPA of 4.2 or higher."
     ),
-    ProjectIdea(
-        id="proj_02",
-        title="Automated PDF Summarizer & Quiz Generator",
-        domain="NLP",
-        difficulty="Beginner",
-        tech_stack=["Python", "LangChain", "ChromaDB"],
-        description="Extract key concepts from past papers and generate practice quizzes automatically.",
-        guidelines=[
-            "Parse PDF materials into chunked text.",
-            "Generate embeddings using ChromaDB or FAISS.",
-            "Query vector DB to produce 5-question multiple choice quizzes."
-        ],
-        recommended_datasets=["ArXiv CS Papers Dataset"]
+    ChosunScholarship(
+        id="csu_sch_02",
+        title_kr="성적장학금 (우수 1)",
+        title_en="Academic Achievement Scholarship (50%)",
+        category="Academic",
+        min_gpa=3.8,
+        topik_level=None,
+        benefit="50% Tuition Waiver",
+        description="Awarded to students with a previous semester GPA between 3.8 and 4.19."
+    ),
+    ChosunScholarship(
+        id="csu_sch_03",
+        title_kr="성적장학금 (우수 2)",
+        title_en="Academic Achievement Scholarship (33%)",
+        category="Academic",
+        min_gpa=3.5,
+        topik_level=None,
+        benefit="33% Tuition Waiver",
+        description="Awarded to students with a previous semester GPA between 3.5 and 3.79."
+    ),
+    ChosunScholarship(
+        id="csu_sch_04",
+        title_kr="성적장학금 (장려)",
+        title_en="Academic Achievement Scholarship (25%)",
+        category="Academic",
+        min_gpa=3.0,
+        topik_level=None,
+        benefit="25% Tuition Waiver",
+        description="Awarded to students with a previous semester GPA between 3.0 and 3.49."
+    ),
+    ChosunScholarship(
+        id="csu_sch_05",
+        title_kr="성적 JUMP 장학금",
+        title_en="GPA JUMP Scholarship",
+        category="Improvement",
+        min_gpa=0.0,
+        topik_level=None,
+        benefit="300,000 - 900,000 KRW Grant",
+        description="Awarded to students who significantly improve their GPA compared to the previous semester."
+    ),
+    ChosunScholarship(
+        id="csu_sch_06",
+        title_kr="TOPIK 장학금",
+        title_en="TOPIK Proficiency Scholarship",
+        category="Language",
+        min_gpa=0.0,
+        topik_level=4,
+        benefit="500,000 - 900,000 KRW Grant",
+        description="Awarded upon achieving or upgrading to TOPIK Level 4 or higher."
     )
 ]
 
 
-def get_project_ideas(domain: Optional[str] = None) -> List[dict]:
-    """Fetch project ideas, optionally filtered by domain."""
-    if not domain:
-        return [asdict(p) for p in SAMPLE_PROJECTS]
-    return [asdict(p) for p in SAMPLE_PROJECTS if p.domain.lower() == domain.lower()]
+def get_chosun_scholarships(user_gpa: float, user_topik: int = 0) -> List[dict]:
+    """
+    Evaluates a Chosun University student's GPA (out of 4.5) and TOPIK level
+    to recommend all eligible internal and external scholarships.
+    """
+    eligible = []
+    for sch in CHOSUN_SCHOLARSHIPS:
+        # Check GPA condition
+        if user_gpa >= sch.min_gpa:
+            # Check TOPIK requirement if applicable
+            if sch.topik_level and user_topik < sch.topik_level:
+                continue
+            eligible.append(asdict(sch))
+            
+    return eligible
 
 
-def get_portfolio_builder_config(user_projects: List[dict]) -> dict:
-    """Generates structured data to help student present their projects (e.g. GitHub/Portfolio link)."""
-    return {
-        "portfolio_summary": f"User has completed {len(user_projects)} projects.",
-        "github_integration_status": "Ready for export",
-        "suggested_tags": list({tech for p in user_projects for tech in p.get("tech_stack", [])}),
-        "portfolio_template_sections": [
-            "Project Demo / Live Link",
-            "System Architecture Diagram",
-            "Key Features & Tech Stack",
-            "Installation & Usage Setup"
-        ]
-    }
+def get_gpa_improvement_target(current_gpa: float) -> dict:
+    """Calculates the next scholarship tier for Chosun University students."""
+    if current_gpa < 3.0:
+        return {"next_tier": 3.0, "benefit": "25% Tuition Waiver", "gap": round(3.0 - current_gpa, 2)}
+    elif current_gpa < 3.5:
+        return {"next_tier": 3.5, "benefit": "33% Tuition Waiver", "gap": round(3.5 - current_gpa, 2)}
+    elif current_gpa < 3.8:
+        return {"next_tier": 3.8, "benefit": "50% Tuition Waiver", "gap": round(3.8 - current_gpa, 2)}
+    elif current_gpa < 4.2:
+        return {"next_tier": 4.2, "benefit": "100% Tuition Waiver", "gap": round(4.2 - current_gpa, 2)}
+    else:
+        return {"next_tier": 4.5, "benefit": "Maximum Academic Tier Maintained!", "gap": 0.0}
