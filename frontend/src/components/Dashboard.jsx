@@ -10,12 +10,12 @@ function Dashboard() {
       <div className="hero">
 
         <h1>
-          🎓 AI Academic Success Champion
+          🎓 Undergraduate Success Champion
         </h1>
 
         <p>
           Your intelligent companion for learning, academic resources,
-          scholarships, projects and AI-powered assistance.
+          scholarships, projects and AI-powered assistance for excellent performance.
         </p>
 
         <Link to="/chat" className="hero-button">
