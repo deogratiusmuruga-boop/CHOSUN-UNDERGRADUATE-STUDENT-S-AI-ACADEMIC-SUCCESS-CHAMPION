@@ -11,21 +11,20 @@ from schemas import ResourceResponse
 from services.resources_service import (
     save_resource,
     list_resources_by_type,
-    list_all_resources,
     get_resource_by_id
 )
 
 router = APIRouter(
-    prefix="/resources",
-    tags=["Academic Resources"]
+    prefix="/materials",
+    tags=["Academic Resources - Materials"]
 )
 
 UPLOAD_DIR = "Uploads"
-RESOURCE_TYPE = "study_guide"
+RESOURCE_TYPE = "note"
 
 
 @router.post("/", response_model=ResourceResponse)
-def upload_study_guide(
+def upload_material(
     title: str = Form(...),
     course: str = Form(None),
     year: str = Form(None),
@@ -54,16 +53,16 @@ def upload_study_guide(
 
 
 @router.get("/", response_model=list[ResourceResponse])
-def get_all_resources(
+def get_materials(
+    course: str = None,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user)
 ):
-    # returns notes + pastpapers + study guides combined
-    return list_all_resources(db)
+    return list_resources_by_type(db, RESOURCE_TYPE, course)
 
 
 @router.get("/{resource_id}", response_model=ResourceResponse)
-def get_resource(
+def get_material(
     resource_id: int,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user)

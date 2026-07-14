@@ -7,10 +7,11 @@ from routers import (
     users,
     chatbot,
     resources,
+    materials,
+    pastpapers,
     scholarships,
     projects,
     upload,
-    
 )
 
 # --------------------------------------------------
@@ -33,6 +34,8 @@ app = FastAPI(
 app.include_router(users.router)
 app.include_router(chatbot.router)
 app.include_router(resources.router)
+app.include_router(materials.router)
+app.include_router(pastpapers.router)
 app.include_router(scholarships.router)
 app.include_router(projects.router)
 app.include_router(upload.router)

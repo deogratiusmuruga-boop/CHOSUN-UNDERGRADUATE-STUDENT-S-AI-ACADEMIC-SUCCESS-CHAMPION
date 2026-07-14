@@ -1,4 +1,7 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
+from datetime import datetime
+
 
 
 class UserCreate(BaseModel):
@@ -24,6 +27,91 @@ class Token(BaseModel):
     token_type: str
 
 
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
+# ---- MEMBER 1 - Chatbot ----
+
+class ChatRequest(BaseModel):
+    message: str
+
+
+class ChatResponse(BaseModel):
+    reply: str
+
+
+class StudyPlanRequest(BaseModel):
+    subject: str
+    goal: str
+    time_available: str
+
+
+class GPATipsRequest(BaseModel):
+    current_gpa: float
+    target_gpa: float
+    subjects: list[str]
+
+
+class QuizRequest(BaseModel):
+    topic: str
+    num_questions: int = 5
+
+
+class ExplainRequest(BaseModel):
+    topic: str
+
+
+class ChatHistoryResponse(BaseModel):
+    id: int
+    message: str
+    reply: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ---- MEMBER 2 - Academic Resources ----
+
+class ResourceResponse(BaseModel):
+    id: int
+    title: str
+    type: str
+    course: Optional[str] = None
+    year: Optional[str] = None
+    filename: str
+    filepath: str
+    uploaded_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ---- MEMBER 3 - Scholarships & Projects ----
+
+class ScholarshipCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    field: Optional[str] = None
+    deadline: Optional[str] = None
+    link: Optional[str] = None
+
+
+class ScholarshipResponse(ScholarshipCreate):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ProjectCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    category: Optional[str] = None
+    link: Optional[str] = None
+
+
+class ProjectResponse(ProjectCreate):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
