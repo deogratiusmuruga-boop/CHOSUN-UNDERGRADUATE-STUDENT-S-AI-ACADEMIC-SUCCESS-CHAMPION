@@ -1,42 +1,46 @@
+import { useEffect, useState } from "react";
 import "../styles/Scholarships.css";
 
 function Scholarships() {
 
-  const scholarships = [
+  const [scholarships, setScholarships] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
-    {
-      title: "Chosun Excellence Scholarship",
-      amount: "Full Tuition",
-      deadline: "20 August 2026",
-      eligibility: "Undergraduate Students",
-    },
 
-    {
-      title: "AI Research Internship",
-      amount: "Monthly Stipend",
-      deadline: "5 September 2026",
-      eligibility: "Computer Engineering",
-    },
+  useEffect(() => {
 
-    {
-      title: "Global Leadership Scholarship",
-      amount: "50% Tuition",
-      deadline: "15 October 2026",
-      eligibility: "International Students",
-    },
+    fetch("http://localhost:8000/scholarships/")
+      .then((response) => response.json())
+      .then((data) => {
 
-    {
-      title: "Innovation Project Grant",
-      amount: "$2,000 Research Grant",
-      deadline: "30 September 2026",
-      eligibility: "Final Year Students",
-    },
+        setScholarships(data);
+        setLoading(false);
 
-  ];
+      })
+      .catch((error) => {
+
+        console.error("Error loading scholarships:", error);
+        setLoading(false);
+
+      });
+
+  }, []);
+
+
+
+  const filteredScholarships = scholarships.filter((item) =>
+    item.title
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
+
 
   return (
 
     <div className="scholarship-page">
+
 
       <div className="scholarship-header">
 
@@ -48,52 +52,84 @@ function Scholarships() {
 
       </div>
 
+
+
       <div className="scholarship-search">
 
         <input
           type="text"
           placeholder="🔍 Search scholarships..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
 
       </div>
 
-      <div className="scholarship-grid">
 
-        {scholarships.map((item, index) => (
 
-          <div
-            key={index}
-            className="scholarship-card"
-          >
+      {loading ? (
 
-            <h2>{item.title}</h2>
+        <h3>Loading scholarships...</h3>
 
-            <div className="scholarship-info">
+      ) : (
 
-              <p><strong>💰 Funding:</strong> {item.amount}</p>
 
-              <p><strong>📅 Deadline:</strong> {item.deadline}</p>
+        <div className="scholarship-grid">
 
-              <p><strong>🎯 Eligibility:</strong> {item.eligibility}</p>
+
+          {filteredScholarships.map((item, index) => (
+
+
+            <div
+              key={index}
+              className="scholarship-card"
+            >
+
+
+              <h2>
+                {item.title}
+              </h2>
+
+
+
+              <div className="scholarship-info">
+
+                <p>
+                  <strong>📅 Deadline:</strong>
+                  {" "}
+                  {item.deadline}
+                </p>
+
+
+              </div>
+
+
+
+              <div className="scholarship-footer">
+
+                View Details →
+
+              </div>
+
 
             </div>
 
-            <div className="scholarship-footer">
 
-              View Details →
+          ))}
 
-            </div>
 
-          </div>
+        </div>
 
-        ))}
 
-      </div>
+      )}
+
+
 
     </div>
 
   );
 
 }
+
 
 export default Scholarships;

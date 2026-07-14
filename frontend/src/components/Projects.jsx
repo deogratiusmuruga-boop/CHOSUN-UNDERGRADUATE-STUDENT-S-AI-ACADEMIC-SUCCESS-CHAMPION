@@ -1,50 +1,35 @@
+import { useEffect, useState } from "react";
 import "../styles/Projects.css";
 
 function Projects() {
 
-  const projects = [
+  const [projects, setProjects] = useState([]);
+  const [search, setSearch] = useState("");
 
-    {
-      title: "AI Academic Assistant",
-      category: "Artificial Intelligence",
-      type: "Team Project",
-      level: "Beginner",
-      description:
-        "Develop an AI-powered assistant to support students with academics.",
-    },
 
-    {
-      title: "Library Management System",
-      category: "Web Development",
-      type: "Individual Project",
-      level: "Intermediate",
-      description:
-        "Build a web application for managing books, borrowing and returns.",
-    },
+  useEffect(() => {
 
-    {
-      title: "Student Attendance System",
-      category: "Mobile Application",
-      type: "Team Project",
-      level: "Intermediate",
-      description:
-        "Create a mobile app for recording and tracking student attendance.",
-    },
+    fetch("http://localhost:8000/projects/")
+      .then((response) => response.json())
+      .then((data) => {
+        setProjects(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching projects:", error);
+      });
 
-    {
-      title: "Smart Campus Navigation",
-      category: "IoT & Mobile",
-      type: "Research Project",
-      level: "Advanced",
-      description:
-        "Design an intelligent campus navigation system using location services.",
-    },
+  }, []);
 
-  ];
+
+  const filteredProjects = projects.filter((project) =>
+    project.title.toLowerCase().includes(search.toLowerCase())
+  );
+
 
   return (
 
     <div className="projects-page">
+
 
       <div className="projects-header">
 
@@ -56,39 +41,48 @@ function Projects() {
 
       </div>
 
+
       <div className="projects-search">
 
         <input
           type="text"
           placeholder="🔍 Search projects..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
 
       </div>
 
+
+
       <div className="projects-grid">
 
-        {projects.map((project, index) => (
+
+        {filteredProjects.map((project, index) => (
+
 
           <div
             key={index}
             className="project-card"
           >
 
-            <h2>{project.title}</h2>
 
-            <p className="project-description">
-              {project.description}
-            </p>
+            <h2>
+              {project.title}
+            </h2>
+
 
             <div className="project-info">
 
-              <p><strong>🧠 Category:</strong> {project.category}</p>
+              <p>
+                <strong>⭐ Difficulty:</strong>
+                {" "}
+                {project.difficulty}
+              </p>
 
-              <p><strong>👥 Type:</strong> {project.type}</p>
-
-              <p><strong>⭐ Level:</strong> {project.level}</p>
 
             </div>
+
 
             <div className="project-footer">
 
@@ -96,16 +90,21 @@ function Projects() {
 
             </div>
 
+
           </div>
+
 
         ))}
 
+
       </div>
+
 
     </div>
 
   );
 
 }
+
 
 export default Projects;
