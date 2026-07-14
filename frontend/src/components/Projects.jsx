@@ -1,77 +1,111 @@
+import "../styles/Projects.css";
+
 function Projects() {
+
+  const projects = [
+
+    {
+      title: "AI Academic Assistant",
+      category: "Artificial Intelligence",
+      type: "Team Project",
+      level: "Beginner",
+      description:
+        "Develop an AI-powered assistant to support students with academics.",
+    },
+
+    {
+      title: "Library Management System",
+      category: "Web Development",
+      type: "Individual Project",
+      level: "Intermediate",
+      description:
+        "Build a web application for managing books, borrowing and returns.",
+    },
+
+    {
+      title: "Student Attendance System",
+      category: "Mobile Application",
+      type: "Team Project",
+      level: "Intermediate",
+      description:
+        "Create a mobile app for recording and tracking student attendance.",
+    },
+
+    {
+      title: "Smart Campus Navigation",
+      category: "IoT & Mobile",
+      type: "Research Project",
+      level: "Advanced",
+      description:
+        "Design an intelligent campus navigation system using location services.",
+    },
+
+  ];
 
   return (
 
-    <div>
+    <div className="projects-page">
 
-      <h1>
-        Student Projects
-      </h1>
+      <div className="projects-header">
 
+        <h1>💼 Student Projects</h1>
 
-      <p>
-        Explore project ideas and portfolio resources.
-      </p>
+        <p>
+          Explore innovative academic projects and gain practical experience.
+        </p>
 
+      </div>
 
-      <h2>
-        Project Categories
-      </h2>
+      <div className="projects-search">
 
+        <input
+          type="text"
+          placeholder="🔍 Search projects..."
+        />
 
-      <ul>
+      </div>
 
-        <li>
-          Artificial Intelligence Projects
-        </li>
+      <div className="projects-grid">
 
+        {projects.map((project, index) => (
 
-        <li>
-          Web Development Projects
-        </li>
+          <div
+            key={index}
+            className="project-card"
+          >
 
+            <h2>{project.title}</h2>
 
-        <li>
-          Data Science Projects
-        </li>
+            <p className="project-description">
+              {project.description}
+            </p>
 
+            <div className="project-info">
 
-        <li>
-          Research Projects
-        </li>
+              <p><strong>🧠 Category:</strong> {project.category}</p>
 
-      </ul>
+              <p><strong>👥 Type:</strong> {project.type}</p>
 
+              <p><strong>⭐ Level:</strong> {project.level}</p>
 
-      <h2>
-        Portfolio Resources
-      </h2>
+            </div>
 
+            <div className="project-footer">
 
-      <ul>
+              View Project →
 
-        <li>
-          Project Documentation Guides
-        </li>
+            </div>
 
+          </div>
 
-        <li>
-          GitHub Portfolio Tips
-        </li>
+        ))}
 
-
-        <li>
-          Resume Improvement Resources
-        </li>
-
-      </ul>
-
+      </div>
 
     </div>
 
   );
 
 }
-
 
 export default Projects;

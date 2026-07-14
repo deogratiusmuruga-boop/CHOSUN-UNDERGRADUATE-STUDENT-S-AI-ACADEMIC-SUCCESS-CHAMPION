@@ -1,50 +1,80 @@
+import "../styles/Resources.css";
+
 function Resources() {
+  const resources = [
+    {
+      icon: "📘",
+      title: "Course Notes",
+      description: "Lecture notes and course materials from different subjects.",
+    },
+    {
+      icon: "📄",
+      title: "Past Examination Papers",
+      description: "Practice with previous university examination papers.",
+    },
+    {
+      icon: "📚",
+      title: "Study Guides",
+      description: "Well-organized study guides to help with revision.",
+    },
+    {
+      icon: "🎥",
+      title: "Video Tutorials",
+      description: "Recommended educational videos for difficult topics.",
+    },
+  ];
 
   return (
+    <div className="resources-page">
 
-    <div>
+      <div className="resources-header">
 
-      <h1>
-        Academic Resources
-      </h1>
+        <h1>📚 Academic Resources</h1>
 
+        <p>
+          Find learning materials to improve your academic performance.
+        </p>
 
-      <p>
-        Access course notes, past papers, and study materials.
-      </p>
+      </div>
 
+      <div className="search-box">
 
-      <h2>
-        Available Resources
-      </h2>
+        <input
+          type="text"
+          placeholder="🔍 Search resources..."
+        />
 
+      </div>
 
-      <ul>
+      <div className="resources-grid">
 
-        <li>
-          Course Notes
-        </li>
+        {resources.map((resource, index) => (
 
-        <li>
-          Revision Materials
-        </li>
+          <div
+            key={index}
+            className="resource-card"
+          >
 
-        <li>
-          Past Papers
-        </li>
+            <div className="resource-icon">
+              {resource.icon}
+            </div>
 
-        <li>
-          Study Guides
-        </li>
+            <h2>{resource.title}</h2>
 
-      </ul>
+            <p>{resource.description}</p>
 
+            <div className="resource-footer">
+              <span> Open resource → </span> 
+            </div>
+
+          </div>
+
+        ))}
+
+      </div>
 
     </div>
-
   );
-
 }
-
 
 export default Resources;

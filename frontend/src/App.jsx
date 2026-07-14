@@ -1,54 +1,76 @@
 import "./App.css";
 
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 
 import Dashboard from "./components/Dashboard";
 import Chat from "./components/Chat";
 import Resources from "./components/Resources";
 import Scholarships from "./components/Scholarships";
 import Projects from "./components/Projects";
-
-
+import Navbar from "./components/Navbar";
 function App() {
-
   return (
-
     <BrowserRouter>
 
-      <nav>
+      <Navbar>
 
-        <Link to="/">Dashboard</Link>
+        <div className="logo">
+          🎓 AI Academic Success Champion
+        </div>
 
-        <Link to="/chat">Chat</Link>
+        <div className="nav-links">
 
-        <Link to="/resources">Resources</Link>
+          <NavLink
+            to="/"
+            className={({ isActive }) => isActive ? "active-link" : ""}
+          >
+            Dashboard
+          </NavLink>
 
-        <Link to="/scholarships">Scholarships</Link>
+          <NavLink
+            to="/chat"
+            className={({ isActive }) => isActive ? "active-link" : ""}
+          >
+            AI Chat
+          </NavLink>
 
-        <Link to="/projects">Projects</Link>
+          <NavLink
+            to="/resources"
+            className={({ isActive }) => isActive ? "active-link" : ""}
+          >
+            Resources
+          </NavLink>
 
-      </nav>
+          <NavLink
+            to="/scholarships"
+            className={({ isActive }) => isActive ? "active-link" : ""}
+          >
+            Scholarships
+          </NavLink>
 
+          <NavLink
+            to="/projects"
+            className={({ isActive }) => isActive ? "active-link" : ""}
+          >
+            Projects
+          </NavLink>
+
+        </div>
+
+      </Navbar>
 
       <Routes>
 
         <Route path="/" element={<Dashboard />} />
-
         <Route path="/chat" element={<Chat />} />
-
         <Route path="/resources" element={<Resources />} />
-
         <Route path="/scholarships" element={<Scholarships />} />
-
         <Route path="/projects" element={<Projects />} />
 
       </Routes>
 
     </BrowserRouter>
-
   );
-
 }
-
 
 export default App;
