@@ -82,6 +82,10 @@ class ResourceResponse(BaseModel):
 
     class Config:
         from_attributes = True
+class ResourceUpdate(BaseModel):
+    title: Optional[str] = None
+    course: Optional[str] = None
+    year: Optional[str] = None
 
 
 # ---- MEMBER 3 - Scholarships & Projects ----
