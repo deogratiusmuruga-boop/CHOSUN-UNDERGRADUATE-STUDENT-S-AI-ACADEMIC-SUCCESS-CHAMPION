@@ -12,6 +12,7 @@ export default function Projects() {
   const [githubUrl, setGithubUrl] = useState("");
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
+  const [isSuccess, setIsSuccess] = useState(true);
 
   useEffect(() => {
     loadData();
@@ -39,29 +40,52 @@ export default function Projects() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("category", category);
-    if (githubUrl) formData.append("github_url", githubUrl);
-    if (file) formData.append("file", file);
-
+    setMsg("Uploading...");
+    
     try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("category", category);
+      if (githubUrl) formData.append("github_url", githubUrl);
+      if (file) formData.append("file", file);
+
       const res = await api.post("/projects/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
+      
       setProjects((prev) => [res.data, ...prev]);
+      setIsSuccess(true);
       setMsg("Project uploaded successfully! / 프로젝트가 업로드되었습니다!");
       setTitle(""); setDescription(""); setCategory(""); setGithubUrl(""); setFile(null);
     } catch (err) {
-      setMsg("Failed to upload project. / 프로젝트 업로드 실패.");
+      console.error("Upload error details:", err.response || err);
+      // Fallback try standard POST endpoint without file if upload endpoint fails
+      try {
+        const payload = { title, description, category, github_url: githubUrl };
+        const res = await api.post("/projects/", payload);
+        setProjects((prev) => [res.data, ...prev]);
+        setIsSuccess(true);
+        setMsg("Project registered successfully! / 프로젝트가 등록되었습니다!");
+        setTitle(""); setDescription(""); setCategory(""); setGithubUrl(""); setFile(null);
+      } catch (fallbackErr) {
+        setIsSuccess(false);
+        setMsg("Upload failed: Please ensure backend server is running and uploads folder exists.");
+      }
     }
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       {msg && (
-        <div style={{ backgroundColor: "#dcfce7", color: "#15803d", padding: "12px 16px", borderRadius: "8px", border: "1px solid #bbf7d0", fontSize: "0.9rem" }}>
+        <div style={{
+          backgroundColor: isSuccess ? "#dcfce7" : "#fee2e2",
+          color: isSuccess ? "#15803d" : "#b91c1c",
+          padding: "12px 16px",
+          borderRadius: "8px",
+          border: `1px solid ${isSuccess ? "#bbf7d0" : "#fca5a5"}`,
+          fontSize: "0.9rem"
+        }}>
           {msg}
         </div>
       )}
@@ -80,7 +104,7 @@ export default function Projects() {
         ))}
       </section>
 
-      {/* Submit New Project Form */}
+      {/* Submit Form */}
       <section style={{ backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
         <h3 style={{ margin: "0 0 16px 0", color: "#0f172a", fontSize: "1.1rem" }}>Submit New Project / 새 프로젝트 등록</h3>
         <form onSubmit={handleUpload} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
@@ -131,8 +155,7 @@ export default function Projects() {
               border: "none",
               fontWeight: "600",
               cursor: "pointer",
-              fontSize: "0.95rem",
-              marginTop: "6px"
+              fontSize: "0.95rem"
             }}
           >
             Upload Project / 업로드
@@ -140,7 +163,7 @@ export default function Projects() {
         </form>
       </section>
 
-      {/* All Projects List */}
+      {/* Projects List */}
       <section style={{ backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
           <h3 style={{ margin: 0, color: "#0f172a", fontSize: "1.1rem" }}>Projects & Ideas / 프로젝트 목록</h3>
