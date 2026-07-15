@@ -2,10 +2,6 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from models import Project
 
-# MEMBER 3 - Projects
-# Replace recommend_projects() with real logic later
-# (e.g. matching by student interests/skills)
-
 
 def create_project(db: Session, data, added_by: int):
     project = Project(
@@ -13,6 +9,24 @@ def create_project(db: Session, data, added_by: int):
         description=data.description,
         category=data.category,
         link=data.link,
+        github_url=data.github_url,
+        added_by=added_by
+    )
+
+    db.add(project)
+    db.commit()
+    db.refresh(project)
+
+    return project
+
+
+def create_project_with_file(db: Session, project_data: dict, added_by: int):
+    project = Project(
+        title=project_data["title"],
+        description=project_data["description"],
+        category=project_data["category"],
+        github_url=project_data.get("github_url"),
+        file_path=project_data.get("file_path"),
         added_by=added_by
     )
 
@@ -42,5 +56,25 @@ def get_project_by_id(db: Session, project_id: int):
 
 
 def recommend_projects(db: Session, current_user):
-    # MEMBER 3: replace with real logic based on user's interests
     return db.query(Project).order_by(Project.created_at.desc()).limit(5).all()
+
+
+def update_project(db: Session, project_id: int, updates):
+    project = get_project_by_id(db, project_id)
+
+    for field, value in updates.model_dump(exclude_unset=True).items():
+        setattr(project, field, value)
+
+    db.commit()
+    db.refresh(project)
+
+    return project
+
+
+def delete_project(db: Session, project_id: int):
+    project = get_project_by_id(db, project_id)
+
+    db.delete(project)
+    db.commit()
+
+    return {"detail": "Project deleted"}

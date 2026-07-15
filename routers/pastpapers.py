@@ -7,11 +7,13 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from auth import get_current_user
-from schemas import ResourceResponse
+from schemas import ResourceResponse, ResourceUpdate
 from services.resources_service import (
     save_resource,
     list_resources_by_type,
-    get_resource_by_id
+    get_resource_by_id,
+    update_resource,
+    delete_resource
 )
 
 router = APIRouter(
@@ -68,3 +70,22 @@ def get_pastpaper(
     current_user=Depends(get_current_user)
 ):
     return get_resource_by_id(db, resource_id)
+
+
+@router.patch("/{resource_id}", response_model=ResourceResponse)
+def edit_pastpaper(
+    resource_id: int,
+    updates: ResourceUpdate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return update_resource(db, resource_id, updates)
+
+
+@router.delete("/{resource_id}")
+def remove_pastpaper(
+    resource_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return delete_resource(db, resource_id)

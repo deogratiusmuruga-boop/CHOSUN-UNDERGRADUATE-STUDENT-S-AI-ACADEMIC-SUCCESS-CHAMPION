@@ -82,6 +82,10 @@ class ResourceResponse(BaseModel):
 
     class Config:
         from_attributes = True
+class ResourceUpdate(BaseModel):
+    title: Optional[str] = None
+    course: Optional[str] = None
+    year: Optional[str] = None
 
 
 # ---- MEMBER 3 - Scholarships & Projects ----
@@ -107,11 +111,19 @@ class ProjectCreate(BaseModel):
     description: Optional[str] = None
     category: Optional[str] = None
     link: Optional[str] = None
+    github_url: Optional[str] = None
 
 
 class ProjectResponse(ProjectCreate):
     id: int
+    file_path: Optional[str] = None
     created_at: datetime
 
     class Config:
         from_attributes = True
+class ProjectUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    category: Optional[str] = None
+    link: Optional[str] = None
+    github_url: Optional[str] = None
