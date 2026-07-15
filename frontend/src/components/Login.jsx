@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/Login.css";
 
 function Login() {
 
@@ -9,6 +10,7 @@ function Login() {
 
   const [message, setMessage] = useState("");
 
+
   const handleChange = (e) => {
 
     setFormData({
@@ -17,6 +19,7 @@ function Login() {
     });
 
   };
+
 
   const handleSubmit = async (e) => {
 
@@ -27,82 +30,120 @@ function Login() {
       const response = await fetch(
         "http://localhost:8000/users/login",
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+          method:"POST",
+
+          headers:{
+            "Content-Type":"application/json",
           },
-          body: JSON.stringify(formData),
+
+          body:JSON.stringify(formData),
         }
       );
 
+
       const data = await response.json();
 
-      console.log("LOGIN RESPONSE:", data);
 
-      if (response.ok) {
+      if(response.ok){
 
         localStorage.setItem(
           "access_token",
           data.access_token
         );
 
-        setMessage("✅ Login successful!");
+        setMessage("✅ Login successful");
 
-      } else {
 
-        setMessage(data.detail || "Login failed");
+      }else{
+
+        setMessage(
+          data.detail || "Login failed"
+        );
 
       }
 
-    } catch (error) {
 
-      console.error(error);
-      setMessage("Server error");
+    }catch(error){
+
+      console.log(error);
+
+      setMessage(
+        "Server connection failed"
+      );
 
     }
 
   };
 
+
   return (
 
-    <div>
+    <div className="login-page">
 
-      <h1>Login</h1>
 
-      <form onSubmit={handleSubmit}>
+      <div className="login-card">
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-        />
 
-        <br /><br />
+        <div className="login-logo">
+          🎓
+        </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
 
-        <br /><br />
+        <h1>
+          Welcome Back
+        </h1>
 
-        <button type="submit">
-          Login
-        </button>
 
-      </form>
+        <p className="subtitle">
+          Login to AI Academic Success Champion
+        </p>
 
-      <p>{message}</p>
+
+
+        <form onSubmit={handleSubmit}>
+
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Email address"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+
+
+          <button type="submit">
+            Login
+          </button>
+
+
+        </form>
+
+
+        <p className="message">
+          {message}
+        </p>
+
+
+      </div>
+
 
     </div>
 
   );
 
 }
+
 
 export default Login;

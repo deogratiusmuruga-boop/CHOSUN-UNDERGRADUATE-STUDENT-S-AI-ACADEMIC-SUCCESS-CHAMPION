@@ -1,109 +1,206 @@
-import { Link } from "react-router-dom";
-import StatCard from "./StatCard";
-import "../styles/Dashboard.css";
+import "./../styles/Dashboard.css";
+
 function Dashboard() {
+
   return (
+
     <div className="dashboard">
 
-      {/* Hero Section */}
 
-      <div className="hero">
+      {/* Welcome Section */}
 
-        <h1>
-          🎓 Undergraduate Success Champion
-        </h1>
+      <div className="welcome-card">
 
-        <p>
-          Your intelligent companion for learning, academic resources,
-          scholarships, projects and AI-powered assistance for excellent performance.
-        </p>
+        <div>
 
-        <Link to="/chat" className="hero-button">
-          Start AI Chat →
-        </Link>
+          <h1>
+            Welcome back, Student 👋
+          </h1>
+
+          <p>
+            Your AI Academic Success Champion is ready
+            to help you improve your learning journey.
+          </p>
+
+        </div>
+
+
+        <div className="ai-icon">
+          🤖
+        </div>
 
       </div>
 
-      <div className="stat-grid">
-
-  <StatCard
-    icon="🤖"
-    number="24"
-    title="AI Conversations"
-  />
-
-  <StatCard
-    icon="📚"
-    number="125"
-    title="Resources"
-  />
-
-  <StatCard
-    icon="🎓"
-    number="18"
-    title="Scholarships"
-  />
-
-  <StatCard
-    icon="💡"
-    number="40"
-    title="Projects"
-  />
-
-</div>
 
 
-      {/* Feature Cards */}
+      {/* Statistics */}
 
-      <div className="cards">
+      <div className="stats-grid">
 
-        <Link to="/chat" className="card">
 
-          <h2>🤖 AI Chat</h2>
+        <div className="stat-card">
+
+          <h3>
+            GPA Progress
+          </h3>
+
+          <h2>
+            3.8 / 4.5
+          </h2>
 
           <p>
-            Ask academic questions and receive AI-powered assistance.
+            Keep improving your academic performance.
           </p>
 
-        </Link>
+        </div>
 
 
-        <Link to="/resources" className="card">
 
-          <h2>📚 Resources</h2>
+        <div className="stat-card">
+
+          <h3>
+            AI Conversations
+          </h3>
+
+          <h2>
+            24
+          </h2>
 
           <p>
-            Access notes, tutorials, revision materials and study guides.
+            Questions solved with AI Assistant.
           </p>
 
-        </Link>
+        </div>
 
 
-        <Link to="/scholarships" className="card">
 
-          <h2>🎓 Scholarships</h2>
+        <div className="stat-card">
+
+          <h3>
+            Resources
+          </h3>
+
+          <h2>
+            120+
+          </h2>
 
           <p>
-            Discover scholarships, internships and funding opportunities.
+            Learning materials available.
           </p>
 
-        </Link>
+        </div>
 
-
-        <Link to="/projects" className="card">
-
-          <h2>💡 Student Projects</h2>
-
-          <p>
-            Explore innovative project ideas and build your portfolio.
-          </p>
-
-        </Link>
 
       </div>
+
+
+
+
+      {/* Quick Actions */}
+
+      <h2 className="section-title">
+        Quick Actions
+      </h2>
+
+
+      <div className="action-grid">
+
+
+        <div className="action-card">
+
+          <span>
+            🤖
+          </span>
+
+          <h3>
+            Ask AI Assistant
+          </h3>
+
+          <p>
+            Get help with coursework and academic questions.
+          </p>
+
+        </div>
+
+
+
+        <div className="action-card">
+
+          <span>
+            📚
+          </span>
+
+          <h3>
+            Study Materials
+          </h3>
+
+          <p>
+            Access notes, books and learning resources.
+          </p>
+
+        </div>
+
+
+
+
+        <div className="action-card">
+
+          <span>
+            🎓
+          </span>
+
+          <h3>
+            Scholarships
+          </h3>
+
+          <p>
+            Discover opportunities for students.
+          </p>
+
+        </div>
+
+
+
+      </div>
+
+
+
+      {/* Recent Activity */}
+
+      <div className="activity-card">
+
+        <h2>
+          Recent Activity
+        </h2>
+
+
+        <ul>
+
+          <li>
+            🤖 Asked AI about GPA improvement
+          </li>
+
+          <li>
+            📚 Viewed Machine Learning materials
+          </li>
+
+          <li>
+            🎓 Checked scholarship opportunities
+          </li>
+
+
+        </ul>
+
+
+      </div>
+
+
 
     </div>
+
   );
+
 }
+
 
 export default Dashboard;

@@ -2,21 +2,25 @@ import { useState } from "react";
 import { sendChatMessage } from "../services/api";
 import "../styles/Chat.css";
 
+
 function Chat() {
+
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [messages, setMessages] = useState([]);
 
-  function clearChat() {
-    setMessages([]);
-  }
+
 
   async function handleSend() {
+
     if (!message.trim()) return;
+
 
     const userMessage = message;
 
-    // Show user message immediately
+
+    // Add user message immediately
     setMessages((prev) => [
       ...prev,
       {
@@ -25,23 +29,31 @@ function Chat() {
       },
     ]);
 
+
     setMessage("");
+
     setLoading(true);
 
+
+
     try {
+
       const data = await sendChatMessage(userMessage);
 
-      const aiResponse = data.message || "No response received.";
 
       setMessages((prev) => [
         ...prev,
         {
           role: "ai",
-          text: aiResponse,
+          text: data.reply || "No response received.",
         },
       ]);
+
+
     } catch (error) {
-      console.log("API Error:", error);
+
+      console.error("Chat error:", error);
+
 
       setMessages((prev) => [
         ...prev,
@@ -50,125 +62,265 @@ function Chat() {
           text: "Unable to connect to AI service.",
         },
       ]);
+
     }
+
 
     setLoading(false);
+
   }
+
+
+
 
   function handleKeyDown(event) {
+
     if (event.key === "Enter") {
+
       handleSend();
+
     }
+
   }
 
-  return (
-    <div className="chat-container">
 
-      <div className="chat-header">
-        <h1>🤖 AI Academic Assistant</h1>
+
+
+  function clearChat() {
+
+    setMessages([]);
+
+  }
+
+
+
+
+
+  return (
+
+    <div className="chat-page">
+
+
+      {/* Header */}
+
+      <div className="chat-title">
+
+        <h1>
+          🤖 AI Assistant
+        </h1>
 
         <p>
-          Ask questions about your coursework, projects,
-          scholarships and academic resources.
+          Academic Success Companion
         </p>
+
       </div>
 
-      <div className="chat-toolbar">
-        <h3>Conversation</h3>
 
-        <button
-          className="clear-button"
-          onClick={clearChat}
-        >
-          Clear Chat
-        </button>
-      </div>
 
-      <div className="chat-history">
 
-        {messages.length === 0 ? (
 
-          <div className="empty-chat">
+      {/* Chat messages */}
 
-            <h2>👋 Welcome!</h2>
+      <div className="chat-window">
 
-            <p>
-              Start chatting with the AI Assistant.
-            </p>
 
-          </div>
+        {
+          messages.length === 0 && (
 
-        ) : (
+            <div className="chat-empty">
 
+              <h2>
+                👋 Hello Student
+              </h2>
+
+              <p>
+                Ask me about your studies, GPA, projects,
+                scholarships or learning resources.
+              </p>
+
+
+              <div className="suggestions">
+
+                <button
+                  onClick={() =>
+                    setMessage("How can I improve my GPA?")
+                  }
+                >
+                  Improve GPA
+                </button>
+
+
+                <button
+                  onClick={() =>
+                    setMessage("Create a study plan for me")
+                  }
+                >
+                  Study Plan
+                </button>
+
+
+                <button
+                  onClick={() =>
+                    setMessage("Explain machine learning")
+                  }
+                >
+                  Explain Topic
+                </button>
+
+
+              </div>
+
+
+            </div>
+
+          )
+        }
+
+
+
+
+        {
           messages.map((msg, index) => (
 
             <div
-  key={index}
-  className={`chat-message ${
-    msg.role === "user"
-      ? "user-message"
-      : "ai-message"
-  }`}
->
+              key={index}
+              className={
+                msg.role === "user"
+                  ? "message user"
+                  : "message ai"
+              }
+            >
 
-  <div className="message-header">
 
-    <div className="message-avatar">
+              {
+                msg.role === "ai" && (
 
-      {msg.role === "user" ? "👤" : "🤖"}
+                  <div className="avatar">
+                    🤖
+                  </div>
 
-    </div>
+                )
+              }
 
-    <strong>
 
-      {msg.role === "user"
-        ? "You"
-        : "AI Assistant"}
 
-    </strong>
+              <div className="bubble">
 
-  </div>
+                {msg.text}
 
-  <p>{msg.text}</p>
+              </div>
 
-</div>
+
+
+              {
+                msg.role === "user" && (
+
+                  <div className="avatar">
+                    👤
+                  </div>
+
+                )
+              }
+
+
+
+            </div>
+
 
           ))
+        }
 
-        )}
+
+
+
+        {
+          loading && (
+
+            <div className="message ai">
+
+              <div className="avatar">
+                🤖
+              </div>
+
+
+              <div className="bubble">
+                Thinking...
+              </div>
+
+
+            </div>
+
+          )
+        }
+
+
 
       </div>
 
-      <div className="chat-input-area">
+
+
+
+
+      {/* Input */}
+
+      <div className="input-area">
+
 
         <input
-          className="chat-input"
+
           type="text"
-          placeholder="Ask anything..."
+
+          placeholder="Message AI Assistant..."
+
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+
+          onChange={(e) =>
+            setMessage(e.target.value)
+          }
+
           onKeyDown={handleKeyDown}
+
         />
 
-        <button
-          className="send-button"
-          onClick={handleSend}
-          disabled={loading}
-        >
-          {loading ? "Thinking..." : "Send"}
-        </button>
+
 
         <button
-          className="send-button clear-button"
-          onClick={clearChat}
+
+          onClick={handleSend}
+
+          disabled={loading}
+
         >
-          Clear
+
+          {loading ? "..." : "Send"}
+
         </button>
+
+
+
+
+        <button
+
+          className="clear-chat"
+
+          onClick={clearChat}
+
+        >
+
+          Clear
+
+        </button>
+
 
       </div>
 
+
+
     </div>
+
   );
+
 }
+
 
 export default Chat;
