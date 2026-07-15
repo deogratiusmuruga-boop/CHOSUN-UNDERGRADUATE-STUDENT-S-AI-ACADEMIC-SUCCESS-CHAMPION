@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+ï»¿import React, { useState } from "react";
 import Projects from "./components/Projects";
 import Scholarships from "./components/Scholarships";
 
@@ -6,49 +6,59 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("projects");
 
   return (
-    <div style={{ fontFamily: "Segoe UI, sans-serif", backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
-      {/* Navigation Bar / »ó´Ü ³×ºñ°ÔÀÌ¼Ç */}
-      <header style={{ backgroundColor: "#1e293b", color: "#ffffff", padding: "1rem 2rem", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
-        <h1 style={{ margin: 0, fontSize: "1.5rem" }}>?? Work Three: Academic Success Portal</h1>
-        <p style={{ margin: "5px 0 0 0", fontSize: "0.9rem", color: "#94a3b8" }}>
-          Project & Scholarship Recommendation Hub / ÇÁ·ÎÁ§Æ® ¹× ÀåÇĞ±İ ÃßÃµ Çãºê
-        </p>
+    <div style={{ fontFamily: "Inter, system-ui, -apple-system, sans-serif", backgroundColor: "#f1f5f9", minHeight: "100vh", color: "#1e293b" }}>
+      {/* Header Bar */}
+      <header style={{ backgroundColor: "#0f172a", color: "#ffffff", padding: "1.5rem 2rem", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <h1 style={{ margin: 0, fontSize: "1.6rem", fontWeight: "700" }}>Academic Success Portal</h1>
+            <p style={{ margin: "4px 0 0 0", fontSize: "0.875rem", color: "#94a3b8" }}>
+              Project & Scholarship Recommendation Hub / í”„ë¡œì íŠ¸ ë° ì¥í•™ê¸ˆ ì¶”ì²œ í—ˆë¸Œ
+            </p>
+          </div>
+        </div>
       </header>
 
-      {/* Tabs / ÅÇ ¹öÆ° */}
-      <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
-        <button
-          onClick={() => setActiveTab("projects")}
-          style={{
-            padding: "10px 20px",
-            borderRadius: "5px",
-            border: "none",
-            cursor: "pointer",
-            fontWeight: "bold",
-            backgroundColor: activeTab === "projects" ? "#2563eb" : "#e2e8f0",
-            color: activeTab === "projects" ? "#ffffff" : "#334155"
-          }}
-        >
-          ?? Projects & Ideas / ÇÁ·ÎÁ§Æ®
-        </button>
-        <button
-          onClick={() => setActiveTab("scholarships")}
-          style={{
-            padding: "10px 20px",
-            borderRadius: "5px",
-            border: "none",
-            cursor: "pointer",
-            fontWeight: "bold",
-            backgroundColor: activeTab === "scholarships" ? "#16a34a" : "#e2e8f0",
-            color: activeTab === "scholarships" ? "#ffffff" : "#334155"
-          }}
-        >
-          ?? Scholarships / ÀåÇĞ±İ
-        </button>
+      {/* Navigation Tabs */}
+      <div style={{ maxWidth: "1000px", margin: "25px auto 0 auto", padding: "0 20px" }}>
+        <div style={{ display: "flex", gap: "12px", borderBottom: "2px solid #e2e8f0", paddingBottom: "10px" }}>
+          <button
+            onClick={() => setActiveTab("projects")}
+            style={{
+              padding: "10px 24px",
+              borderRadius: "8px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: "600",
+              fontSize: "0.95rem",
+              transition: "all 0.2s",
+              backgroundColor: activeTab === "projects" ? "#2563eb" : "transparent",
+              color: activeTab === "projects" ? "#ffffff" : "#64748b"
+            }}
+          >
+            Projects & Ideas / í”„ë¡œì íŠ¸
+          </button>
+          <button
+            onClick={() => setActiveTab("scholarships")}
+            style={{
+              padding: "10px 24px",
+              borderRadius: "8px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: "600",
+              fontSize: "0.95rem",
+              transition: "all 0.2s",
+              backgroundColor: activeTab === "scholarships" ? "#16a34a" : "transparent",
+              color: activeTab === "scholarships" ? "#ffffff" : "#64748b"
+            }}
+          >
+            Scholarships / ì¥í•™ê¸ˆ
+          </button>
+        </div>
       </div>
 
-      {/* Main Content Area / ¸ŞÀÎ ÄÜÅÙÃ÷ */}
-      <main style={{ padding: "20px" }}>
+      {/* Main Container */}
+      <main style={{ maxWidth: "1000px", margin: "0 auto", padding: "20px" }}>
         {activeTab === "projects" ? <Projects /> : <Scholarships />}
       </main>
     </div>
