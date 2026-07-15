@@ -75,5 +75,7 @@ class Project(Base):
     description = Column(Text, nullable=True)
     category = Column(String(100), nullable=True)
     link = Column(String(255), nullable=True)
+    github_url = Column(String(255), nullable=True)
+    file_path = Column(String(255), nullable=True)
     added_by = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.utcnow)

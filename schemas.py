@@ -111,11 +111,19 @@ class ProjectCreate(BaseModel):
     description: Optional[str] = None
     category: Optional[str] = None
     link: Optional[str] = None
+    github_url: Optional[str] = None
 
 
 class ProjectResponse(ProjectCreate):
     id: int
+    file_path: Optional[str] = None
     created_at: datetime
 
     class Config:
         from_attributes = True
+class ProjectUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    category: Optional[str] = None
+    link: Optional[str] = None
+    github_url: Optional[str] = None
