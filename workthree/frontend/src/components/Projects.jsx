@@ -66,9 +66,10 @@ export default function Projects() {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
+      // Insert new project directly into UI list so it displays instantly
       setProjects((prev) => [res.data, ...prev]);
       setIsSuccess(true);
-      setMsg("Project submitted successfully! / 프로젝트가 성공적으로 제출되었습니다!");
+      setMsg("🎉 Project submitted successfully! Displayed below. / 프로젝트가 성공적으로 제출되었습니다!");
       setTitle(""); setDescription(""); setCategory(""); setGithubUrl(""); setLiveUrl(""); setFile(null);
       setShowSubmitForm(false);
     } catch (err) {
@@ -95,7 +96,8 @@ export default function Projects() {
           padding: "12px 16px",
           borderRadius: "8px",
           border: `1px solid ${isSuccess ? "#bbf7d0" : "#fca5a5"}`,
-          fontSize: "0.9rem"
+          fontSize: "0.9rem",
+          fontWeight: "600"
         }}>
           {msg}
         </div>
