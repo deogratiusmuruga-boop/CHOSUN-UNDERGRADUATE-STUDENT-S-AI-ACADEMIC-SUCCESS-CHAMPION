@@ -1,3 +1,5 @@
+﻿# 📘 Integration Guide for Team Members 4 & 5
+
 ## 🏗️ 1. How the System Works
 * **Frontend (React):** Runs on http://localhost:5173
 * **Backend (FastAPI):** Runs on http://localhost:8000
@@ -23,4 +25,4 @@ Terminal 1 (Backend):
 cd workthree\backend; .\venv\Scripts\python.exe -m uvicorn app:app --reload --port 8000
 
 Terminal 2 (Frontend):
-cd workthree\frontend; npm run dev' -Encoding UTF8
+cd workthree\frontend; npm run dev
