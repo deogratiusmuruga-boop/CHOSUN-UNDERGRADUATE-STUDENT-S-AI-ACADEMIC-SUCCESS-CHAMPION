@@ -5,6 +5,7 @@ export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [recommended, setRecommended] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -41,7 +42,7 @@ export default function Projects() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    setMsg("Uploading project & file...");
+    setMsg("Uploading project... / 프로젝트 등록 중...");
 
     try {
       let formatLive = liveUrl;
@@ -63,19 +64,19 @@ export default function Projects() {
 
       setProjects((prev) => [res.data, ...prev]);
       setIsSuccess(true);
-      setMsg("Project and file uploaded successfully! / 프로젝트와 파일이 성공적으로 등록되었습니다!");
+      setMsg("Project submitted successfully! / 프로젝트가 성공적으로 제출되었습니다!");
       setTitle(""); setDescription(""); setCategory(""); setGithubUrl(""); setLiveUrl(""); setFile(null);
+      setShowSubmitForm(false);
     } catch (err) {
       console.error(err);
       setIsSuccess(false);
-      setMsg("Upload failed. Please restart backend server.");
+      setMsg("Submission failed. / 제출 실패.");
     }
   };
 
   const getFileUrl = (filePath) => {
     if (!filePath) return null;
     if (filePath.startsWith("http")) return filePath;
-    // Extract file name if full path saved
     const fileName = filePath.split(/[\\/]/).pop();
     return `http://localhost:8000/uploads/${fileName}`;
   };
@@ -95,9 +96,11 @@ export default function Projects() {
         </div>
       )}
 
-      {/* Recommended Project Banner */}
+      {/* Recommended Banner */}
       <section style={{ backgroundColor: "#ffffff", borderRadius: "12px", padding: "20px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)", borderLeft: "5px solid #2563eb" }}>
-        <h3 style={{ margin: "0 0 12px 0", color: "#1e293b", fontSize: "1.1rem" }}>Recommended Project / 추천 프로젝트</h3>
+        <h3 style={{ margin: "0 0 12px 0", color: "#1e293b", fontSize: "1.1rem" }}>
+          ⭐ Recommended Student Projects / 추천 학생 프로젝트
+        </h3>
         {recommended.map(p => (
           <div key={p.id || Math.random()} style={{ backgroundColor: "#f8fafc", padding: "14px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -109,94 +112,71 @@ export default function Projects() {
         ))}
       </section>
 
-      {/* Submit Form */}
+      {/* Main Student Project Feed */}
       <section style={{ backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-        <h3 style={{ margin: "0 0 16px 0", color: "#0f172a", fontSize: "1.1rem" }}>Submit New Project / 새 프로젝트 등록</h3>
-        <form onSubmit={handleUpload} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-            <input
-              placeholder="Project Title / 프로젝트 제목"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              required
-              style={inputStyle}
-            />
-            <input
-              placeholder="Category (e.g. AI, Web, Senior Care) / 카테고리"
-              value={category}
-              onChange={e => setCategory(e.target.value)}
-              required
-              style={inputStyle}
-            />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
+          <div>
+            <h3 style={{ margin: 0, color: "#0f172a", fontSize: "1.2rem" }}>Project Gallery & Ideas / 프로젝트 갤러리 및 아이디어</h3>
+            <p style={{ margin: "4px 0 0 0", fontSize: "0.85rem", color: "#64748b" }}>Explore student work, portfolios, and research / 학생 작품 및 연구 포트폴리오 탐색</p>
           </div>
 
-          <textarea
-            placeholder="Description / 프로젝트 설명"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            required
-            rows={3}
-            style={{ ...inputStyle, resize: "vertical" }}
-          />
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-            <input
-              placeholder="Live Site App Link (e.g. https://senior-care.run.app) / 라이브 사이트"
-              value={liveUrl}
-              onChange={e => setLiveUrl(e.target.value)}
-              style={inputStyle}
-            />
-            <input
-              placeholder="GitHub Repo URL / 깃허브 링크"
-              value={githubUrl}
-              onChange={e => setGithubUrl(e.target.value)}
-              style={inputStyle}
-            />
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <button
+              onClick={() => setShowSubmitForm(!showSubmitForm)}
+              style={{
+                backgroundColor: showSubmitForm ? "#64748b" : "#2563eb",
+                color: "#ffffff",
+                padding: "8px 16px",
+                borderRadius: "6px",
+                border: "none",
+                fontWeight: "600",
+                fontSize: "0.85rem",
+                cursor: "pointer"
+              }}
+            >
+              {showSubmitForm ? "✖ Close / 닫기" : "➕ Submit Project / 프로젝트 제출"}
+            </button>
           </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <label style={{ fontSize: "0.85rem", fontWeight: "600", color: "#475569" }}>Attach Project File (.zip / .pdf) / 첨부 파일:</label>
-            <input
-              type="file"
-              onChange={e => setFile(e.target.files[0])}
-              style={{ fontSize: "0.85rem", color: "#64748b" }}
-            />
-          </div>
-
-          <button
-            type="submit"
-            style={{
-              backgroundColor: "#2563eb",
-              color: "#ffffff",
-              padding: "12px",
-              borderRadius: "8px",
-              border: "none",
-              fontWeight: "600",
-              cursor: "pointer",
-              fontSize: "0.95rem"
-            }}
-          >
-            Upload Project & File / 업로드
-          </button>
-        </form>
-      </section>
-
-      {/* Projects Feed */}
-      <section style={{ backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-          <h3 style={{ margin: 0, color: "#0f172a", fontSize: "1.1rem" }}>Projects & Ideas / 프로젝트 목록</h3>
-          <form onSubmit={handleFilter} style={{ display: "flex", gap: "8px" }}>
-            <input
-              placeholder="Filter category / 카테고리 검색"
-              value={categoryFilter}
-              onChange={e => setCategoryFilter(e.target.value)}
-              style={{ ...inputStyle, width: "180px", padding: "6px 12px" }}
-            />
-            <button type="submit" style={btnSecondaryStyle}>Filter</button>
-            <button type="button" onClick={loadData} style={{ ...btnSecondaryStyle, backgroundColor: "#f1f5f9", color: "#475569" }}>Reset</button>
-          </form>
         </div>
 
+        {/* Search / Filter Bar */}
+        <form onSubmit={handleFilter} style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+          <input
+            placeholder="Search category (e.g. AI, Web) / 카테고리 검색"
+            value={categoryFilter}
+            onChange={e => setCategoryFilter(e.target.value)}
+            style={{ ...inputStyle, flex: 1 }}
+          />
+          <button type="submit" style={btnSecondaryStyle}>Search / 검색</button>
+          <button type="button" onClick={loadData} style={{ ...btnSecondaryStyle, backgroundColor: "#f1f5f9", color: "#475569" }}>Reset / 초기화</button>
+        </form>
+
+        {/* Collapsible Student Submission Form */}
+        {showSubmitForm && (
+          <div style={{ backgroundColor: "#f8fafc", borderRadius: "10px", padding: "20px", marginBottom: "20px", border: "1px solid #cbd5e1" }}>
+            <h4 style={{ margin: "0 0 14px 0", color: "#0f172a" }}>Submit Your Project / 프로젝트 제출하기</h4>
+            <form onSubmit={handleUpload} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <input placeholder="Project Title / 프로젝트 제목" value={title} onChange={e => setTitle(e.target.value)} required style={inputStyle} />
+                <input placeholder="Category (e.g. AI, Web) / 카테고리" value={category} onChange={e => setCategory(e.target.value)} required style={inputStyle} />
+              </div>
+              <textarea placeholder="Description / 프로젝트 설명" value={description} onChange={e => setDescription(e.target.value)} required rows={3} style={{ ...inputStyle, resize: "vertical" }} />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <input placeholder="Live Site Link / 라이브 사이트 (https://...)" value={liveUrl} onChange={e => setLiveUrl(e.target.value)} style={inputStyle} />
+                <input placeholder="GitHub Link / 깃허브 링크" value={githubUrl} onChange={e => setGithubUrl(e.target.value)} style={inputStyle} />
+              </div>
+              <div>
+                <label style={{ fontSize: "0.85rem", fontWeight: "600", color: "#475569" }}>Attach Zip / PDF File / 첨부 파일:</label>
+                <input type="file" onChange={e => setFile(e.target.files[0])} style={{ display: "block", marginTop: "4px", fontSize: "0.85rem" }} />
+              </div>
+              <button type="submit" style={{ backgroundColor: "#16a34a", color: "#fff", padding: "10px", borderRadius: "6px", border: "none", fontWeight: "600", cursor: "pointer" }}>
+                Confirm Submission / 제출 완료
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Project Display Cards */}
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {projects.map(p => {
             const uploadedFileUrl = getFileUrl(p.file_path);
@@ -208,39 +188,22 @@ export default function Projects() {
                 </div>
                 <p style={{ margin: "10px 0 12px 0", color: "#475569", fontSize: "0.9rem", lineHeight: "1.5" }}>{p.description}</p>
                 
-                {/* Links & Uploaded File Access Buttons */}
                 <div style={{ display: "flex", gap: "10px", paddingTop: "12px", borderTop: "1px solid #e2e8f0", flexWrap: "wrap", alignItems: "center" }}>
-                  {(p.live_url || (p.github_url && p.github_url.includes("run.app"))) && (
-                    <a
-                      href={p.live_url || p.github_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ backgroundColor: "#16a34a", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}
-                    >
-                      🌐 View Live App
+                  {p.live_url && (
+                    <a href={p.live_url} target="_blank" rel="noopener noreferrer" style={{ backgroundColor: "#16a34a", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}>
+                      🌐 Live Site / 라이브 사이트
                     </a>
                   )}
 
                   {uploadedFileUrl && (
-                    <a
-                      href={uploadedFileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download
-                      style={{ backgroundColor: "#0284c7", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}
-                    >
-                      📁 Download Uploaded File
+                    <a href={uploadedFileUrl} target="_blank" rel="noopener noreferrer" download style={{ backgroundColor: "#0284c7", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}>
+                      📁 View File / 첨부파일 다운로드
                     </a>
                   )}
 
-                  {p.github_url && !p.github_url.includes("run.app") && (
-                    <a
-                      href={p.github_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ backgroundColor: "#0f172a", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}
-                    >
-                      💻 GitHub Repo
+                  {p.github_url && (
+                    <a href={p.github_url} target="_blank" rel="noopener noreferrer" style={{ backgroundColor: "#0f172a", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}>
+                      💻 GitHub Repo / 깃허브
                     </a>
                   )}
                 </div>
@@ -262,7 +225,7 @@ const inputStyle = {
 };
 
 const btnSecondaryStyle = {
-  padding: "6px 14px",
+  padding: "8px 16px",
   borderRadius: "6px",
   border: "none",
   backgroundColor: "#0f172a",
