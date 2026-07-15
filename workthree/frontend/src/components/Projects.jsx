@@ -10,6 +10,7 @@ export default function Projects() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
+  const [liveUrl, setLiveUrl] = useState("");
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
   const [isSuccess, setIsSuccess] = useState(true);
@@ -40,39 +41,43 @@ export default function Projects() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    setMsg("Uploading...");
-    
+    setMsg("Uploading project & file...");
+
     try {
+      let formatLive = liveUrl;
+      if (formatLive && !formatLive.startsWith("http://") && !formatLive.startsWith("https://")) {
+        formatLive = "https://" + formatLive;
+      }
+
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
       formData.append("category", category);
       if (githubUrl) formData.append("github_url", githubUrl);
+      if (formatLive) formData.append("live_url", formatLive);
       if (file) formData.append("file", file);
 
       const res = await api.post("/projects/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-      
+
       setProjects((prev) => [res.data, ...prev]);
       setIsSuccess(true);
-      setMsg("Project uploaded successfully! / 프로젝트가 업로드되었습니다!");
-      setTitle(""); setDescription(""); setCategory(""); setGithubUrl(""); setFile(null);
+      setMsg("Project and file uploaded successfully! / 프로젝트와 파일이 성공적으로 등록되었습니다!");
+      setTitle(""); setDescription(""); setCategory(""); setGithubUrl(""); setLiveUrl(""); setFile(null);
     } catch (err) {
-      console.error("Upload error details:", err.response || err);
-      // Fallback try standard POST endpoint without file if upload endpoint fails
-      try {
-        const payload = { title, description, category, github_url: githubUrl };
-        const res = await api.post("/projects/", payload);
-        setProjects((prev) => [res.data, ...prev]);
-        setIsSuccess(true);
-        setMsg("Project registered successfully! / 프로젝트가 등록되었습니다!");
-        setTitle(""); setDescription(""); setCategory(""); setGithubUrl(""); setFile(null);
-      } catch (fallbackErr) {
-        setIsSuccess(false);
-        setMsg("Upload failed: Please ensure backend server is running and uploads folder exists.");
-      }
+      console.error(err);
+      setIsSuccess(false);
+      setMsg("Upload failed. Please restart backend server.");
     }
+  };
+
+  const getFileUrl = (filePath) => {
+    if (!filePath) return null;
+    if (filePath.startsWith("http")) return filePath;
+    // Extract file name if full path saved
+    const fileName = filePath.split(/[\\/]/).pop();
+    return `http://localhost:8000/uploads/${fileName}`;
   };
 
   return (
@@ -90,11 +95,11 @@ export default function Projects() {
         </div>
       )}
 
-      {/* Recommended Projects Banner */}
+      {/* Recommended Project Banner */}
       <section style={{ backgroundColor: "#ffffff", borderRadius: "12px", padding: "20px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)", borderLeft: "5px solid #2563eb" }}>
         <h3 style={{ margin: "0 0 12px 0", color: "#1e293b", fontSize: "1.1rem" }}>Recommended Project / 추천 프로젝트</h3>
         {recommended.map(p => (
-          <div key={p.id} style={{ backgroundColor: "#f8fafc", padding: "14px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+          <div key={p.id || Math.random()} style={{ backgroundColor: "#f8fafc", padding: "14px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <strong style={{ fontSize: "1.05rem", color: "#0f172a" }}>{p.title}</strong>
               <span style={{ backgroundColor: "#dbeafe", color: "#1d4ed8", padding: "2px 10px", borderRadius: "12px", fontSize: "0.8rem", fontWeight: "600" }}>{p.category}</span>
@@ -110,20 +115,21 @@ export default function Projects() {
         <form onSubmit={handleUpload} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
             <input
-              placeholder="Title / 제목"
+              placeholder="Project Title / 프로젝트 제목"
               value={title}
               onChange={e => setTitle(e.target.value)}
               required
               style={inputStyle}
             />
             <input
-              placeholder="Category (e.g. AI, Web) / 카테고리"
+              placeholder="Category (e.g. AI, Web, Senior Care) / 카테고리"
               value={category}
               onChange={e => setCategory(e.target.value)}
               required
               style={inputStyle}
             />
           </div>
+
           <textarea
             placeholder="Description / 프로젝트 설명"
             value={description}
@@ -132,19 +138,31 @@ export default function Projects() {
             rows={3}
             style={{ ...inputStyle, resize: "vertical" }}
           />
-          <input
-            placeholder="GitHub URL / 깃허브 링크"
-            value={githubUrl}
-            onChange={e => setGithubUrl(e.target.value)}
-            style={inputStyle}
-          />
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+            <input
+              placeholder="Live Site App Link (e.g. https://senior-care.run.app) / 라이브 사이트"
+              value={liveUrl}
+              onChange={e => setLiveUrl(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              placeholder="GitHub Repo URL / 깃허브 링크"
+              value={githubUrl}
+              onChange={e => setGithubUrl(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <label style={{ fontSize: "0.85rem", fontWeight: "600", color: "#475569" }}>Attach Project File (.zip / .pdf) / 첨부 파일:</label>
             <input
               type="file"
               onChange={e => setFile(e.target.files[0])}
               style={{ fontSize: "0.85rem", color: "#64748b" }}
             />
           </div>
+
           <button
             type="submit"
             style={{
@@ -158,12 +176,12 @@ export default function Projects() {
               fontSize: "0.95rem"
             }}
           >
-            Upload Project / 업로드
+            Upload Project & File / 업로드
           </button>
         </form>
       </section>
 
-      {/* Projects List */}
+      {/* Projects Feed */}
       <section style={{ backgroundColor: "#ffffff", borderRadius: "12px", padding: "24px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
           <h3 style={{ margin: 0, color: "#0f172a", fontSize: "1.1rem" }}>Projects & Ideas / 프로젝트 목록</h3>
@@ -179,16 +197,56 @@ export default function Projects() {
           </form>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          {projects.map(p => (
-            <div key={p.id} style={{ border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h4 style={{ margin: 0, color: "#1e293b", fontSize: "1rem" }}>{p.title}</h4>
-                <span style={{ backgroundColor: "#f1f5f9", color: "#475569", padding: "2px 8px", borderRadius: "6px", fontSize: "0.8rem" }}>{p.category}</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          {projects.map(p => {
+            const uploadedFileUrl = getFileUrl(p.file_path);
+            return (
+              <div key={p.id || Math.random()} style={{ border: "1px solid #e2e8f0", borderRadius: "8px", padding: "18px", backgroundColor: "#fafafa" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <h4 style={{ margin: 0, color: "#1e293b", fontSize: "1.05rem" }}>{p.title}</h4>
+                  <span style={{ backgroundColor: "#e0f2fe", color: "#0369a1", padding: "3px 10px", borderRadius: "6px", fontSize: "0.8rem", fontWeight: "600" }}>{p.category}</span>
+                </div>
+                <p style={{ margin: "10px 0 12px 0", color: "#475569", fontSize: "0.9rem", lineHeight: "1.5" }}>{p.description}</p>
+                
+                {/* Links & Uploaded File Access Buttons */}
+                <div style={{ display: "flex", gap: "10px", paddingTop: "12px", borderTop: "1px solid #e2e8f0", flexWrap: "wrap", alignItems: "center" }}>
+                  {(p.live_url || (p.github_url && p.github_url.includes("run.app"))) && (
+                    <a
+                      href={p.live_url || p.github_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ backgroundColor: "#16a34a", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}
+                    >
+                      🌐 View Live App
+                    </a>
+                  )}
+
+                  {uploadedFileUrl && (
+                    <a
+                      href={uploadedFileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      style={{ backgroundColor: "#0284c7", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}
+                    >
+                      📁 Download Uploaded File
+                    </a>
+                  )}
+
+                  {p.github_url && !p.github_url.includes("run.app") && (
+                    <a
+                      href={p.github_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ backgroundColor: "#0f172a", color: "#ffffff", padding: "6px 14px", borderRadius: "6px", textDecoration: "none", fontSize: "0.85rem", fontWeight: "600" }}
+                    >
+                      💻 GitHub Repo
+                    </a>
+                  )}
+                </div>
               </div>
-              <p style={{ margin: "8px 0 0 0", color: "#64748b", fontSize: "0.9rem", lineHeight: "1.4" }}>{p.description}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>
