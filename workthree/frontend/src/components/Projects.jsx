@@ -36,8 +36,12 @@ export default function Projects() {
   const handleFilter = async (e) => {
     e.preventDefault();
     const url = categoryFilter ? "/projects/?category=" + categoryFilter : "/projects/";
-    const res = await api.get(url);
-    setProjects(res.data);
+    try {
+      const res = await api.get(url);
+      setProjects(res.data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleUpload = async (e) => {
@@ -70,7 +74,8 @@ export default function Projects() {
     } catch (err) {
       console.error(err);
       setIsSuccess(false);
-      setMsg("Submission failed. / 제출 실패.");
+      const errorDetail = err.response?.data?.detail || err.message || "Server Error";
+      setMsg(`Submission failed / 제출 실패: ${errorDetail}`);
     }
   };
 
