@@ -1,0 +1,272 @@
+.pastpapers-page {
+
+  padding: 40px;
+  background: #f8fafc;
+  min-height: 100vh;
+
+}
+
+
+
+/* Header */
+
+.pastpapers-header {
+
+  margin-bottom: 35px;
+
+}
+
+
+.pastpapers-header h1 {
+
+  font-size: 36px;
+  color: #1e293b;
+  margin-bottom: 10px;
+
+}
+
+
+.pastpapers-header p {
+
+  color: #64748b;
+  font-size: 17px;
+
+}
+
+
+
+/* Upload Card */
+
+.upload-card {
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 16px;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+
+  max-width: 650px;
+
+  margin-bottom: 45px;
+
+}
+
+
+
+.upload-card h2 {
+
+  color: #1e293b;
+
+  margin-bottom: 25px;
+
+}
+
+
+
+.upload-card input {
+
+  width: 100%;
+
+  padding: 13px;
+
+  margin-bottom: 15px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+
+}
+
+
+
+.upload-card input:focus {
+
+  outline: none;
+
+  border-color: #2563eb;
+
+}
+
+
+
+.upload-card button {
+
+  width: 100%;
+
+  padding: 14px;
+
+  background: #2563eb;
+
+  color: white;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+}
+
+
+
+.upload-card button:hover {
+
+  background: #1d4ed8;
+
+}
+
+
+
+
+/* Section */
+
+.papers-section h2 {
+
+  color: #1e293b;
+
+  margin-bottom: 25px;
+
+}
+
+
+
+
+/* Grid */
+
+.papers-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(280px,1fr)
+  );
+
+  gap: 25px;
+
+}
+
+
+
+/* Paper Cards */
+
+.paper-card {
+
+  background: white;
+
+  padding: 25px;
+
+  border-radius: 16px;
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+
+  transition: 0.25s;
+
+}
+
+
+
+.paper-card:hover {
+
+  transform: translateY(-5px);
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+
+}
+
+
+
+.paper-icon {
+
+  font-size: 40px;
+
+  margin-bottom: 15px;
+
+}
+
+
+
+.paper-card h3 {
+
+  color: #0f172a;
+
+  margin-bottom: 15px;
+
+}
+
+
+
+.paper-card p {
+
+  color: #475569;
+
+  margin: 8px 0;
+
+}
+
+
+
+
+/* Open Button */
+
+.paper-card button {
+
+  margin-top: 18px;
+
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 10px;
+
+  border: none;
+
+  background: #0f766e;
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+}
+
+
+
+.paper-card button:hover {
+
+  background: #115e59;
+
+}
+
+
+
+
+/* Mobile */
+
+@media(max-width:768px){
+
+  .pastpapers-page{
+
+    padding:20px;
+
+  }
+
+
+  .pastpapers-header h1{
+
+    font-size:28px;
+
+  }
+
+}

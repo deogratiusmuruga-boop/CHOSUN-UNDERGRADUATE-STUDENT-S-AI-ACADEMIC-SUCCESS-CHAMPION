@@ -1,29 +1,107 @@
 import { useEffect, useState } from "react";
 import "../styles/Projects.css";
 
+
 function Projects() {
 
+
   const [projects, setProjects] = useState([]);
+
   const [search, setSearch] = useState("");
+
+  const [loading, setLoading] = useState(true);
+
+
 
 
   useEffect(() => {
 
-    fetch("http://localhost:8000/projects/")
-      .then((response) => response.json())
-      .then((data) => {
+
+    const token = localStorage.getItem("access_token");
+
+
+
+    fetch(
+      "http://localhost:8000/projects/",
+      {
+
+        headers: {
+
+          Authorization: `Bearer ${token}`,
+
+        },
+
+      }
+
+    )
+
+
+    .then(async(response)=>{
+
+
+      const data = await response.json();
+
+
+      console.log(
+        "Projects:",
+        data
+      );
+
+
+
+      if(response.ok){
+
         setProjects(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching projects:", error);
-      });
+
+      }
+      else{
+
+        alert(data.detail);
+
+      }
+
+
+      setLoading(false);
+
+
+
+    })
+
+
+    .catch((error)=>{
+
+
+      console.error(
+        "Error loading projects:",
+        error
+      );
+
+
+      setLoading(false);
+
+
+    });
+
+
 
   }, []);
 
 
-  const filteredProjects = projects.filter((project) =>
-    project.title.toLowerCase().includes(search.toLowerCase())
+
+
+
+
+  const filteredProjects = projects.filter((project)=>
+
+    project.title
+      .toLowerCase()
+      .includes(search.toLowerCase())
+
   );
+
+
+
+
 
 
   return (
@@ -31,78 +109,170 @@ function Projects() {
     <div className="projects-page">
 
 
+
       <div className="projects-header">
 
-        <h1>💼 Student Projects</h1>
+
+        <h1>
+          🚀 Student Projects
+        </h1>
+
 
         <p>
-          Explore innovative academic projects and gain practical experience.
+          Explore academic, research, and innovation projects.
         </p>
 
+
       </div>
+
+
+
 
 
       <div className="projects-search">
 
+
         <input
+
           type="text"
+
           placeholder="🔍 Search projects..."
+
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+
+          onChange={(e)=>setSearch(e.target.value)}
+
         />
+
 
       </div>
 
 
 
-      <div className="projects-grid">
 
 
-        {filteredProjects.map((project, index) => (
+      {
+        loading ? (
+
+          <h3>
+            Loading projects...
+          </h3>
 
 
-          <div
-            key={index}
-            className="project-card"
-          >
+        ) : filteredProjects.length === 0 ? (
+
+          <h3>
+            No projects available.
+          </h3>
 
 
-            <h2>
-              {project.title}
-            </h2>
+        ) : (
 
 
-            <div className="project-info">
-
-              <p>
-                <strong>⭐ Difficulty:</strong>
-                {" "}
-                {project.difficulty}
-              </p>
+          <div className="projects-grid">
 
 
-            </div>
+          {
+            filteredProjects.map((project)=>(
 
 
-            <div className="project-footer">
+              <div
 
-              View Project →
+                key={project.id}
 
-            </div>
+                className="project-card"
+
+              >
+
+
+
+                <div className="project-icon">
+
+                  🚀
+
+                </div>
+
+
+
+                <h2>
+
+                  {project.title}
+
+                </h2>
+
+
+
+
+                <p>
+
+                  <strong>
+                    Category:
+                  </strong>
+
+                  {" "}
+
+                  {project.category || "General"}
+
+                </p>
+
+
+
+
+
+                <p>
+
+                  {project.description}
+
+                </p>
+
+
+
+
+
+                {
+                  project.link && (
+
+                    <a
+
+                      href={project.link}
+
+                      target="_blank"
+
+                    >
+
+                      View Project →
+
+                    </a>
+
+                  )
+
+                }
+
+
+
+              </div>
+
+
+
+            ))
+          }
+
 
 
           </div>
 
 
-        ))}
+        )
 
 
-      </div>
+      }
+
 
 
     </div>
 
   );
+
 
 }
 

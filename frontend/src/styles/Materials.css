@@ -1,0 +1,267 @@
+.materials-page {
+
+  padding: 40px;
+  background: #f8fafc;
+  min-height: 100vh;
+
+}
+
+
+/* Header */
+
+.materials-header {
+
+  margin-bottom: 35px;
+
+}
+
+
+.materials-header h1 {
+
+  font-size: 36px;
+  color: #1e293b;
+  margin-bottom: 10px;
+
+}
+
+
+.materials-header p {
+
+  color: #64748b;
+  font-size: 17px;
+
+}
+
+
+
+/* Upload Section */
+
+.upload-card {
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 16px;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+
+  max-width: 650px;
+
+  margin-bottom: 45px;
+
+}
+
+
+
+.upload-card h2 {
+
+  margin-bottom: 25px;
+
+  color: #1e293b;
+
+}
+
+
+
+.upload-card input {
+
+  width: 100%;
+
+  padding: 13px;
+
+  margin-bottom: 15px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+
+}
+
+
+
+.upload-card input:focus {
+
+  outline: none;
+
+  border-color: #2563eb;
+
+}
+
+
+
+.upload-card button {
+
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #2563eb;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+}
+
+
+
+.upload-card button:hover {
+
+  background: #1d4ed8;
+
+}
+
+
+
+/* Materials Section */
+
+.materials-section h2 {
+
+  color: #1e293b;
+
+  margin-bottom: 25px;
+
+}
+
+
+
+
+.materials-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(280px, 1fr)
+  );
+
+  gap: 25px;
+
+}
+
+
+
+/* Material Cards */
+
+.material-card {
+
+  background: white;
+
+  padding: 25px;
+
+  border-radius: 16px;
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease;
+
+}
+
+
+
+.material-card:hover {
+
+  transform: translateY(-5px);
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+
+}
+
+
+
+.material-icon {
+
+  font-size: 40px;
+
+  margin-bottom: 15px;
+
+}
+
+
+
+.material-card h3 {
+
+  color: #0f172a;
+
+  margin-bottom: 15px;
+
+}
+
+
+
+.material-card p {
+
+  color: #475569;
+
+  margin: 8px 0;
+
+}
+
+
+
+/* Open Button */
+
+.open-btn {
+
+  margin-top: 18px;
+
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 10px;
+
+  border: none;
+
+  background: #0f766e;
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+}
+
+
+
+.open-btn:hover {
+
+  background: #115e59;
+
+}
+
+
+
+/* Mobile */
+
+@media(max-width:768px){
+
+  .materials-page{
+
+    padding:20px;
+
+  }
+
+
+  .materials-header h1{
+
+    font-size:28px;
+
+  }
+
+}
